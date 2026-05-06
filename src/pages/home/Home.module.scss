@@ -1,0 +1,122 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 22px;
+  padding: 28px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(19, 194, 194, 0.18), transparent 26%),
+    linear-gradient(135deg, #ffffff, #f7faff);
+  box-shadow: var(--shadow-card);
+}
+
+.heroContent {
+  h2 {
+    font-size: clamp(2rem, 3.2vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: #101828;
+  }
+
+  p {
+    max-width: 720px;
+    color: var(--color-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.primaryAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 20px;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #2f54eb, #13c2c2);
+  font-weight: 700;
+  box-shadow: 0 18px 28px rgba(47, 84, 235, 0.22);
+}
+
+.heroPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panelCard,
+.featureCard {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(219, 227, 239, 0.9);
+  box-shadow: var(--shadow-card);
+}
+
+.panelCard {
+  strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+
+  span {
+    color: var(--color-muted);
+    line-height: 1.6;
+  }
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.featureCard {
+  h3 {
+    margin: 18px 0 10px;
+    font-size: 1.1rem;
+  }
+
+  p {
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+}
+
+.featureIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 1.45rem;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+}

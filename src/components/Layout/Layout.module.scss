@@ -1,0 +1,36 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: transparent;
+
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 16px 16px 0;
+    gap: 16px;
+
+    &[data-mobile="true"] {
+      margin-left: 0;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 4px 16px;
+
+      .childrenWrapper {
+        min-height: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    .main {
+      padding: 12px 12px 0;
+    }
+  }
+}

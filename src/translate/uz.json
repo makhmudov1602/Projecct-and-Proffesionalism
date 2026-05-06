@@ -1,0 +1,19 @@
+{
+  "auth": {
+    "login": "Kirish"
+  },
+  "lang": {
+    "lang": "Uz"
+  },
+  "Sidebar": {
+    "users": "Foydalanuvchilar",
+    "settings": "Sozlamalar"
+  },
+  "Buttons": {
+    "create": "Yaratish",
+    "edit": "Ozgartirish",
+    "delete": "Ochirish",
+    "read": "Korish",
+    "statistics": "Statistika"
+  }
+}

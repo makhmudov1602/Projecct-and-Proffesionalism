@@ -1,0 +1,167 @@
+.controlPanel {
+  background: linear-gradient(135deg, #ffffff, #f7fbff);
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: 20px;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+
+  h3 {
+    margin: 8px 0;
+    font-size: 1.6rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-muted);
+    max-width: 760px;
+    line-height: 1.7;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.statusCard {
+  min-width: 180px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: #111827;
+  color: #fff;
+
+  span {
+    display: block;
+    color: rgba(255, 255, 255, 0.66);
+    margin-bottom: 6px;
+  }
+
+  strong {
+    font-size: 1.05rem;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+
+  label {
+    display: grid;
+    gap: 8px;
+  }
+
+  span {
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+
+  input,
+  select {
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding: 14px 16px;
+    outline: none;
+  }
+}
+
+.quickStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+
+  div {
+    padding: 18px;
+    border-radius: 20px;
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+  }
+
+  span {
+    display: block;
+    color: var(--color-muted);
+    margin-bottom: 6px;
+  }
+
+  strong {
+    font-size: 1.15rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.startButton,
+.resetButton,
+.finishButton {
+  border: none;
+  border-radius: 16px;
+  padding: 13px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.startButton {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+}
+
+.resetButton {
+  background: #e5eefc;
+  color: #1d4ed8;
+}
+
+.finishButton {
+  background: #111827;
+  color: #fff;
+}
+
+.tipBox {
+  margin-left: auto;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(59, 130, 246, 0.08);
+  color: #1d4ed8;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 960px) {
+  .heading,
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tipBox {
+    margin-left: 0;
+  }
+
+  .grid,
+  .quickStats {
+    grid-template-columns: 1fr;
+  }
+}

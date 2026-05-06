@@ -1,0 +1,19 @@
+{
+  "auth": {
+    "login": "Вход"
+  },
+  "lang": {
+    "lang": "RU"
+  },
+  "Sidebar": {
+    "users": "Пользователи",
+    "settings": "Настройки"
+  },
+  "Buttons": {
+    "create": "Создать",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "read": "Посмотреть",
+    "statistics": "Cтатистика"
+  }
+}

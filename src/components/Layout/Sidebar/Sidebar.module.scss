@@ -1,0 +1,166 @@
+.sidebar {
+  width: 280px;
+  min-height: 100vh;
+  padding: 16px;
+
+  .inner {
+    height: calc(100vh - 32px);
+    position: sticky;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 20px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #0f172a 0%, #182230 100%);
+    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.24);
+  }
+
+  .sidebarHeader {
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .logo {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px;
+  }
+
+  .brandText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    strong {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    span {
+      color: rgba(226, 232, 240, 0.78);
+      font-size: 0.88rem;
+    }
+  }
+
+  .statusCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #e2e8f0;
+
+    strong {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 0.82rem;
+      opacity: 0.85;
+    }
+  }
+
+  .statusDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #22c55e;
+    margin-top: 5px;
+    box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.12);
+  }
+
+  .menuContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .menuTitle,
+  .subMenuItem {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .menuTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-radius: 18px;
+    color: #cbd5e1;
+    background: transparent;
+    transition: all 0.25s ease;
+
+    &:hover,
+    &.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.11);
+      transform: translateX(2px);
+    }
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.98rem;
+  }
+
+  .chevron {
+    display: inline-flex;
+    transition: transform 0.25s ease;
+
+    &.open {
+      transform: rotate(90deg);
+    }
+  }
+
+  .subMenu {
+    max-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: max-height 0.25s ease;
+    padding-left: 14px;
+
+    &.openMenu {
+      max-height: 240px;
+      margin-top: 6px;
+    }
+  }
+
+  .subMenuItem {
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #cbd5e1;
+
+    &:hover,
+    &.subActive {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    display: none;
+  }
+}

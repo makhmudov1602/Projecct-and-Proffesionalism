@@ -1,0 +1,264 @@
+.card {
+  position: relative;
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  border-radius: 28px;
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: 18px;
+}
+
+.removeButton {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: none;
+  background: #eef2ff;
+  color: #1d4ed8;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.playerHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  strong {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  span {
+    color: var(--color-muted);
+  }
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.rankBadge {
+  margin-left: auto;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  div {
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+  }
+
+  span {
+    display: block;
+    color: var(--color-muted);
+    margin-bottom: 4px;
+  }
+
+  strong {
+    font-size: 1.1rem;
+  }
+}
+
+.progressBlock {
+  display: grid;
+  gap: 10px;
+}
+
+.progressTop {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-muted);
+}
+
+.progressBar {
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #60a5fa, #2563eb);
+}
+
+.cameraBlock,
+.previewCard,
+.shotHistory {
+  padding: 18px;
+  border-radius: 22px;
+  background: #f8fafc;
+  border: 1px solid var(--color-border);
+}
+
+.sectionTitle {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cameraBlock {
+  display: grid;
+  gap: 12px;
+
+  select {
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    padding: 13px 14px;
+    background: #fff;
+    outline: none;
+  }
+}
+
+.inlineButtons {
+  display: flex;
+  gap: 10px;
+
+  button {
+    flex: 1;
+    border: none;
+    border-radius: 14px;
+    padding: 11px 14px;
+    background: #e0ecff;
+    color: #1d4ed8;
+    font-weight: 700;
+    cursor: pointer;
+  }
+}
+
+.previewImage,
+.previewPlaceholder {
+  width: 100%;
+  min-height: 220px;
+  border-radius: 18px;
+}
+
+.previewImage {
+  object-fit: cover;
+}
+
+.previewPlaceholder {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #eff6ff, #e2e8f0);
+  color: #334155;
+}
+
+.scoreList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.scoreBadge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+.footerBlock {
+  display: grid;
+  gap: 12px;
+}
+
+.statusBox {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #111827;
+  color: #fff;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.captureButton {
+  border: none;
+  border-radius: 18px;
+  padding: 14px 18px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .inlineButtons {
+    flex-direction: column;
+  }
+}
+
+.manualCameraForm {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px dashed #bfdbfe;
+
+  input {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    padding: 12px 14px;
+    background: #fff;
+    outline: none;
+  }
+
+  button {
+    border: none;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: #1d4ed8;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+}
+
+.manualGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .manualGrid {
+    grid-template-columns: 1fr;
+  }
+}

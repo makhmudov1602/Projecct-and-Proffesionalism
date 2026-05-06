@@ -1,0 +1,82 @@
+<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/><meta http-equiv="pragma" content="no-cache"><meta http-equiv="cache-control" content="no-cache"><meta http-equiv="Expires" content="0"><link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"><title></title><link href="Common/static/theme/theme.css" rel="stylesheet"/><link href="./css/hui.082348c362eefde42398.css?082348c362eefde42398" rel="stylesheet"><link href="./css/lodash.082348c362eefde42398.css?082348c362eefde42398" rel="stylesheet"><link href="./css/jquery.082348c362eefde42398.css?082348c362eefde42398" rel="stylesheet"><link href="./css/echarts.082348c362eefde42398.css?082348c362eefde42398" rel="stylesheet"><link href="./css/vendor~root-application.082348c362eefde42398.css?082348c362eefde42398" rel="stylesheet"><link href="./css/default~root-application.082348c362eefde42398.css?082348c362eefde42398" rel="stylesheet"></head><body><div id="app"></div><script>// 检验浏览器类型及版本方法
+	var supportBrowser = function() {
+   var Sys = {
+     edge: null,
+     firefox: null,
+     chrome: null,
+     safari: null
+   };
+   var ua = navigator.userAgent.toLowerCase();
+   var s = null;
+   //判断浏览器类型
+   if ((s = ua.match(/edge\/([\d.]+)/)) !== null) {
+     Sys.edge = Number(s[1].split(".")[0]);
+   }
+   if ((s = ua.match(/firefox\/([\d.]+)/)) !== null) {
+     Sys.firefox = Number(s[1].split(".")[0]);
+   }
+   if ((Sys.edge === null) && ((s = ua.match(/chrome\/([\d.]+)/)) !== null)) {
+     Sys.chrome = Number(s[1].split(".")[0]);
+   }
+   if ((s = ua.match(/version\/([\d.]+).*safari/)) !== null) {
+     Sys.safari = Number(s[1].split(".")[0]);
+   }
+
+   //判断浏览版本
+   if (Sys.firefox && (Sys.firefox >= 88)) {
+     return true;
+   }
+   if (Sys.chrome && (Sys.chrome >= 91)) {
+     return true;
+   }
+   if (Sys.safari && (Sys.safari >= 13)) {
+     return true;
+   }
+   if (Sys.edge && (Sys.edge >= 91)) {
+     return true;
+   }
+   return false;
+ };
+
+ // 检验设备是移动端
+ var ismobile = function() {
+   var mobileReg = /Android|iPhone|iPad|iPod|webOS|BlackBerry|Mobile|IEMobile|Opera Mini/i;
+   return new RegExp(mobileReg).test(navigator.userAgent);
+ };
+
+ // 检验是4200直连情况，屏蔽NotSupport
+ // 检验ie浏览器
+ var isIE = function() {
+   const isIE = !!window.ActiveXObject || "ActiveXObject" in window;
+   return isIE;
+ };
+
+ // 检验是平台跳转或者4200直连情况，屏蔽NotSupport
+ var isDispatch = function() {
+   var deviceInfo = null;
+   if (typeof (JSON) === 'undefined') {
+     // eslint-disable-next-line prefer-template, no-eval
+     deviceInfo = eval("(" + sessionStorage.getItem('deviceInfo') + ")");
+   } else {
+     deviceInfo = JSON.parse(sessionStorage.getItem('deviceInfo'));
+   }
+      
+   if (deviceInfo && (deviceInfo.mode || deviceInfo.Mode)) {
+     return true;
+   }
+   return false;
+ };
+ //低版本浏览器显示拦截信息，允许用户继续访问
+ var Goahead = '';
+ if (typeof (JSON) === 'undefined') {
+   // eslint-disable-next-line no-eval
+   Goahead = eval(sessionStorage.getItem('Goahead'));
+ } else {
+   Goahead = JSON.parse(sessionStorage.getItem('Goahead'));
+ }
+
+ if (isDispatch() && isIE()) {//离线包跳转时，检测平台是ie浏览器内核则拦截
+   document.location.href = "./NotSupport/NotSupport.html";
+ } else if (!isDispatch() && !supportBrowser() && !ismobile() && !Goahead) {
+   document.location.href = "./NotSupport/NotSupport.html";
+ }</script><script for="main_plugin_multiVideoActiveX" event="GetSelectWndInfo(SelectWndInfo)">GetSelectWndInfo(SelectWndInfo);</script><script for="main_plugin_multiVideoActiveX" event="PluginEventHandler(iEventType, iParam1, iParam2)">PluginEventHandler(iEventType, iParam1, iParam2);</script><script for="main_plugin_multiVideoActiveX" event="ZoomInfoCallback(szZoomInfo)">ZoomInfoCallback(szZoomInfo);</script><script for="main_plugin_multiVideoActiveX" event="SetZeroChanEnlarge(EnlargeInfo)">SetZeroChanEnlarge(EnlargeInfo);</script><script for="main_plugin_multiVideoActiveX" event="MouseEvent(szXml)">MouseEvent(szXml);</script><script for="main_plugin_multiVideoActiveX" event="KeyBoardEvent(szXml)">KeyBoardEvent(szXml);</script><script src="root-runtime.js?082348c362eefde42398"></script><script src="js/hui_chunk.ca61b4e3db2eabf563f9.js?082348c362eefde42398"></script><script src="js/lodash_chunk.25e064e1c2b18e64a12c.js?082348c362eefde42398"></script><script src="js/jquery_chunk.c34b97fd28cde03cabcc.js?082348c362eefde42398"></script><script src="js/echarts_chunk.4ba29ebecae312c49ebc.js?082348c362eefde42398"></script><script src="js/vendor~root-application_chunk.f033f536f77ae530d550.js?082348c362eefde42398"></script><script src="js/default~root-application_chunk.0e59f97dd476c1aa3d6e.js?082348c362eefde42398"></script><script src="js/root-application_chunk.1bb0f54b731f17859bd1.js?082348c362eefde42398"></script></body></html>
