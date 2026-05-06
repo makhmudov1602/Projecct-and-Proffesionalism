@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nishon Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --sidebar-width: 250px;
+            --header-height: 70px;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f7fb; color: var(--dark); line-height: 1.6; }
+        .container { display: flex; min-height: 100vh; }
+        .sidebar { width: var(--sidebar-width); background: white; box-shadow: var(--box-shadow); transition: all .3s; z-index: 1000; height: 100vh; position: fixed; left: 0; top: 0; }
+        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid var(--light-gray); background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%); color: white; }
+        .sidebar-header h2 { color: white; margin-bottom: 5px; }
+        .sidebar-header p { font-size: 12px; opacity: .8; }
+        .sidebar-menu { padding: 20px 0; }
+        .menu-item { padding: 12px 20px; display: flex; align-items: center; color: var(--gray); text-decoration: none; transition: all .3s; }
+        .menu-item:hover, .menu-item.active { background-color: rgba(67,97,238,.1); color: var(--primary); border-left: 4px solid var(--primary); }
+        .menu-item i { margin-right: 12px; font-size: 18px; }
+        .main-content { flex: 1; margin-left: var(--sidebar-width); padding: 20px; }
+        .header { background: white; padding: 15px 20px; border-radius: var(--border-radius); box-shadow: var(--box-shadow); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { color: var(--primary); font-size: 24px; }
+        .api-status { display: flex; align-items: center; background: rgba(76,201,240,.1); padding: 8px 15px; border-radius: 20px; color: var(--success); }
+        .api-status i { margin-right: 8px; }
+        .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .card { background: white; border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 20px; }
+        .stat-card { display: flex; align-items: center; }
+        .stat-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 24px; }
+        .bg-primary { background-color: rgba(67,97,238,.1); color: var(--primary); }
+        .bg-success { background-color: rgba(76,201,240,.1); color: var(--success); }
+        .bg-warning { background-color: rgba(248,150,30,.1); color: var(--warning); }
+        .bg-danger { background-color: rgba(247,37,133,.1); color: var(--danger); }
+        .stat-info h3 { font-size: 24px; margin-bottom: 5px; }
+        .stat-info p { color: var(--gray); font-size: 14px; }
+        .camera-stream { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .stream-card { position: relative; overflow: hidden; background: white; border-radius: var(--border-radius); box-shadow: var(--box-shadow); }
+        .stream-header { padding: 15px; border-bottom: 1px solid var(--light-gray); display: flex; justify-content: space-between; align-items: center; }
+        .stream-header h3 { color: var(--primary); }
+        .stream-content { padding: 15px; height: 250px; display: flex; align-items: center; justify-content: center; background: #000; }
+        .stream-content img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .stream-actions { padding: 15px; display: flex; justify-content: space-between; align-items:center; gap: 10px; border-top: 1px solid var(--light-gray); }
+        .btn { display: inline-block; font-weight: 500; text-align: center; padding: 8px 16px; border: none; border-radius: var(--border-radius); cursor: pointer; transition: all .3s; font-size: 14px; }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--secondary); }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-danger { background-color: var(--danger); color: white; }
+        .api-console { background: white; border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 20px; margin-bottom: 20px; }
+        .console-tabs { display: flex; border-bottom: 1px solid var(--light-gray); margin-bottom: 20px; }
+        .console-tab { padding: 10px 20px; cursor: pointer; transition: all .3s; }
+        .console-tab.active { border-bottom: 3px solid var(--primary); color: var(--primary); font-weight: 500; }
+        .endpoint { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--light-gray); }
+        .endpoint:last-child { border-bottom: none; }
+        .method { display: inline-block; padding: 5px 10px; border-radius: 4px; font-weight: 600; margin-right: 10px; }
+        .method.get { background-color: rgba(76,201,240,.1); color: var(--success); }
+        .method.post { background-color: rgba(67,97,238,.1); color: var(--primary); }
+        .method.put { background-color: rgba(248,150,30,.1); color: var(--warning); }
+        .method.delete { background-color: rgba(247,37,133,.1); color: var(--danger); }
+        .endpoint-url { font-family: monospace; background-color: var(--light); padding: 10px; border-radius: var(--border-radius); margin: 10px 0; display: block; word-break: break-all; }
+        .endpoint-actions { margin-top: 10px; }
+        @media (max-width: 992px) { .sidebar{width:70px} .sidebar-header h2,.menu-item span{display:none} .menu-item{justify-content:center; padding:15px} .menu-item i{margin-right:0} .main-content{margin-left:70px} }
+        @media (max-width: 768px) { .dashboard-cards,.camera-stream{grid-template-columns:1fr} .sidebar{width:0; overflow:hidden} .main-content{margin-left:0} .sidebar.active{width:var(--sidebar-width)} .sidebar.active .sidebar-header h2,.sidebar.active .menu-item span{display:block} .sidebar.active .menu-item{justify-content:flex-start; padding:12px 20px} .sidebar.active .menu-item i{margin-right:12px} .menu-toggle{display:block} }
+        .menu-toggle { display:none; background:none; border:none; font-size:24px; cursor:pointer; color:var(--primary); }
+        .websocket-status { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; }
+        .websocket-connected { background-color: var(--success); }
+        .websocket-disconnected { background-color: var(--danger); }
+        .tab-content { display:none; }
+        .tab-content.active { display:block; }
+        textarea.json { width:100%; min-height:120px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; padding:10px; border:1px solid var(--light-gray); border-radius:8px; background:#fff; }
+        .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; border:1px solid var(--light-gray); }
+        .badge-success { background-color: rgba(76,201,240,.12); color: var(--success); }
+        .badge-danger { background-color: rgba(247,37,133,.12); color: var(--danger); }
+        .pill { font-weight:600; font-size:13px; padding:6px 10px; border-radius: 999px; background: rgba(67,97,238,.06); border:1px solid var(--light-gray); color:#111; }
+        .loading { opacity: 0.6; pointer-events: none; }
+        .debug-panel { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; margin-top: 15px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
+        pre#api-response { background:#0f1724; color:#dbeafe; padding:12px; border-radius:8px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space:pre-wrap; max-height:200px; overflow:auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Nishon Admin</h2>
+                <p>API Testing Dashboard</p>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active" data-tab="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="cameras">
+                    <i class="fas fa-video"></i>
+                    <span>Cameras</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="rpis">
+                    <i class="fas fa-microchip"></i>
+                    <span>Branches</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="apiConsole">
+                    <i class="fas fa-terminal"></i>
+                    <span>API Console</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1>Nishon Dashboard</h1>
+                    <p>Test your APIs and monitor camera streams</p>
+                </div>
+                <div class="api-status">
+                    <i class="fas fa-plug"></i>
+                    <span id="health-text">API Connecting…</span>
+                    <span id="ws-dot" class="websocket-status websocket-disconnected" title="WebSocket Status"></span>
+                    <span id="ws-frames-dot" class="websocket-status websocket-disconnected" title="Frames WS" style="margin-left: 5px;"></span>
+                    <span id="ws-detections-dot" class="websocket-status websocket-disconnected" title="Detections WS" style="margin-left: 5px;"></span>
+                </div>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-cards">
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-primary">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="camera-count">0</h3>
+                            <p>Active Cameras</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="branch-count">0</h3>
+                            <p>Branches</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-warning">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="detections-count">0</h3>
+                            <p>Total Detections</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="score-count">0</h3>
+                            <p>Total Score</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin: 20px 0;">Camera Streams</h2>
+                <div class="card" style="margin-bottom:16px;">
+                    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                        <label for="branch-select" style="font-weight:600; color:var(--primary);">Select Branch:</label>
+                        <select id="branch-select" class="btn" style="background:#fff; border:1px solid var(--light-gray); color:var(--dark);">
+                            <option value="">Loading Branches…</option>
+                        </select>
+                        <button class="btn btn-primary" id="refresh-cams">Load Cameras</button>
+                        <span id="cams-hint" style="color:var(--gray); font-size:13px;">Choose a branch to list its cameras.</span>
+                    </div>
+                </div>
+                <div id="camera-streams-container" class="camera-stream"></div>
+
+                <!-- Debug Panel -->
+                <div class="card">
+                    <h3 style="margin-bottom:10px;">Debug Information</h3>
+                    <div class="debug-panel" id="debug-info">
+                        Waiting for WebSocket connections...
+                    </div>
+                    <button class="btn" onclick="clearDebug()" style="margin-top:10px;">Clear Debug</button>
+                </div>
+            </div>
+
+            <!-- API Console Tab -->
+            <div id="apiConsole" class="tab-content">
+                <h2 style="margin-bottom: 20px;">API Testing Console</h2>
+                <div class="api-console">
+                    <div class="console-tabs">
+                        <div class="console-tab active" data-tab="health">Health</div>
+                        <div class="console-tab" data-tab="cameras">Cameras</div>
+                        <div class="console-tab" data-tab="branches">Branches</div>
+                        <div class="console-tab" data-tab="settings">AI Settings</div>
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                        <strong>Last API response:</strong>
+                        <pre id="api-response">{}</pre>
+                    </div>
+
+                    <!-- Health -->
+                    <div id="health" class="tab-content active">
+                        <div class="endpoint">
+                            <div>
+                                <span class="method get">GET</span>
+                                <span>/api/v1/ai/health</span>
+                            </div>
+                            <p style="margin-top: 10px;">Check the health status of the API service.</p>
+                            <span class="endpoint-url">/api/v1/ai/health</span>
+                            <div class="endpoint-actions">
+                                <button class="btn btn-primary" onclick="testEndpoint('GET', '/ai/health')">Test Endpoint</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cameras -->
+                    <div id="cameras" class="tab-content">
+                        <div class="card" style="margin-bottom:16px;">
+                            <h3 style="margin-bottom:10px;color:var(--primary);">Create Camera</h3>
+                            <form id="camera-create-form" onsubmit="return createCamera(event)">
+                                <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:8px;">
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="Username" placeholder="Username" required />
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="Password" placeholder="Password" type="password" required />
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="IpAddress" placeholder="IpAddress" required />
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="BranchId" placeholder="BranchId (required)" type="number" required />
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="Description" placeholder="Description (optional)" />
+                                    <button class="btn btn-primary" type="submit">Create Camera</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card">
+                            <div style="display:flex;justify-content:space-between;align-items:center; margin-bottom:10px;">
+                                <h3 style="color:var(--primary);">Cameras</h3>
+                                <div>
+                                    <input id="cam-search" class="btn" style="background:#fff;border:1px solid var(--light-gray)" placeholder="Search (IP or Desc)" oninput="filterCameraTable()" />
+                                    <button class="btn" onclick="loadCameraList()">Refresh</button>
+                                </div>
+                            </div>
+                            <div style="overflow:auto;">
+                                <table id="camera-table" style="width:100%; border-collapse:collapse;">
+                                    <thead>
+                                        <tr style="text-align:left;border-bottom:1px solid var(--light-gray)">
+                                            <th style="padding:8px;">Id</th>
+                                            <th style="padding:8px;">IpAddress</th>
+                                            <th style="padding:8px;">Username</th>
+                                            <th style="padding:8px;">BranchId</th>
+                                            <th style="padding:8px;">Description</th>
+                                            <th style="padding:8px;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Branches -->
+                    <div id="branches" class="tab-content">
+                        <div class="card" style="margin-bottom:16px;">
+                            <h3 style="margin-bottom:10px;color:var(--primary);">Create Branch</h3>
+                            <form id="branch-create-form" onsubmit="return createBranch(event)">
+                                <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:8px;">
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="Name" placeholder="Name" required />
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="RegionId" placeholder="RegionId (required)" type="number" required />
+                                    <input class="btn" style="background:#fff;border:1px solid var(--light-gray)" name="Description" placeholder="Description (optional)" />
+                                    <button class="btn btn-primary" type="submit">Create Branch</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card">
+                            <div style="display:flex;justify-content:space-between;align-items:center; margin-bottom:10px;">
+                                <h3 style="color:var(--primary);">Branches</h3>
+                                <div>
+                                    <button class="btn" onclick="loadBranchList()">Refresh</button>
+                                </div>
+                            </div>
+                            <div style="overflow:auto;">
+                                <table id="branch-table" style="width:100%; border-collapse:collapse;">
+                                    <thead>
+                                        <tr style="text-align:left;border-bottom:1px solid var(--light-gray)">
+                                            <th style="padding:8px;">Id</th>
+                                            <th style="padding:8px;">Name</th>
+                                            <th style="padding:8px;">RegionId</th>
+                                            <th style="padding:8px;">Description</th>
+                                            <th style="padding:8px;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Settings -->
+                    <div id="settings" class="tab-content">
+                        <div class="endpoint">
+                            <div>
+                                <span class="method get">GET</span>
+                                <span>/api/v1/ai/settings</span>
+                            </div>
+                            <p style="margin-top: 10px;">Get current AI settings.</p>
+                            <span class="endpoint-url">/api/v1/ai/settings</span>
+                            <div class="endpoint-actions">
+                                <button class="btn btn-primary" onclick="testEndpoint('GET', '/ai/settings')">Get Settings</button>
+                            </div>
+                        </div>
+
+                        <div class="endpoint">
+                            <div>
+                                <span class="method post">POST</span>
+                                <span>/api/v1/ai/settings</span>
+                            </div>
+                            <p style="margin-top: 10px;">Update streaming/processing settings.</p>
+                            <span class="endpoint-url">/api/v1/ai/settings</span>
+                            <textarea id="settings-json" class="json" spellcheck="false">{
+  "fps": 6,
+  "width": 640,
+  "height": 360,
+  "format": "webp",
+  "quality": 60,
+  "emit_frames": true,
+  "stream_kind": "crop"
+}</textarea>
+                            <div class="endpoint-actions">
+                                <button class="btn btn-primary" onclick="sendSettings()">Send Settings</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ======= Configuration =======
+        const API_BASE = window.location.origin;         // e.g. https://example.com
+        const API_PREFIX = '/api/v1';                    // prefix for local API calls
+
+        // Build a robust WS_BASE (wss for https, ws for http)
+        const WS_BASE = (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host;
+
+        // WebSocket connections
+        let wsFrames = null;
+        let wsDetections = null;
+
+        // Camera statistics
+        const cameraStats = new Map();
+        let totalDetections = 0;
+        let totalScore = 0;
+
+        // ======= Debug Functions =======
+        function debugLog(message) {
+            const debugEl = document.getElementById('debug-info');
+            const timestamp = new Date().toLocaleTimeString();
+            debugEl.innerHTML = `[${timestamp}] ${message}<br>${debugEl.innerHTML}`;
+        }
+
+        function clearDebug() {
+            document.getElementById('debug-info').innerHTML = 'Debug cleared...';
+        }
+
+        // ======= WebSocket Management =======
+        function connectWebSockets() {
+            connectFramesWebSocket();
+            connectDetectionsWebSocket();
+        }
+
+        function connectFramesWebSocket() {
+            if (wsFrames && (wsFrames.readyState === WebSocket.OPEN || wsFrames.readyState === WebSocket.CONNECTING)) {
+                return;
+            }
+
+            const wsUrl = `${WS_BASE}${API_PREFIX}/ai/ws/frames`;
+            debugLog(`Connecting to frames WebSocket: ${wsUrl}`);
+
+            try {
+                wsFrames = new WebSocket(wsUrl);
+
+                wsFrames.onopen = () => {
+                    debugLog('✅ Frames WebSocket connected');
+                    updateConnectionStatus('ws-frames-dot', true);
+
+                    // Send initial settings
+                    setTimeout(sendSettingsOverWebSocket, 1000);
+                };
+
+                wsFrames.onmessage = (event) => {
+                    try {
+                        const message = JSON.parse(event.data);
+                        debugLog(`📨 Frames WS: ${message.action || 'unknown'}`);
+
+                        if (message.action === 'frame') {
+                            handleFrameMessage(message);
+                        } else if (message.action === 'settings_updated') {
+                            debugLog('Settings updated via WebSocket');
+                        } else if (message.action === 'pong') {
+                            // Keep alive
+                        }
+                    } catch (error) {
+                        debugLog(`❌ Error parsing frames message: ${error}`);
+                    }
+                };
+
+                wsFrames.onclose = (event) => {
+                    debugLog(`❌ Frames WebSocket disconnected: ${event.code}`);
+                    updateConnectionStatus('ws-frames-dot', false);
+                    setTimeout(connectFramesWebSocket, 3000);
+                };
+
+                wsFrames.onerror = (error) => {
+                    debugLog(`❌ Frames WebSocket error: ${error}`);
+                };
+
+            } catch (error) {
+                debugLog(`❌ Failed to create frames WebSocket: ${error}`);
+                setTimeout(connectFramesWebSocket, 3000);
+            }
+        }
+
+        function connectDetectionsWebSocket() {
+            if (wsDetections && (wsDetections.readyState === WebSocket.OPEN || wsDetections.readyState === WebSocket.CONNECTING)) {
+                return;
+            }
+
+            const wsUrl = `${WS_BASE}${API_PREFIX}/ai/ws/detections`;
+            debugLog(`Connecting to detections WebSocket: ${wsUrl}`);
+
+            try {
+                wsDetections = new WebSocket(wsUrl);
+
+                wsDetections.onopen = () => {
+                    debugLog('✅ Detections WebSocket connected');
+                    updateConnectionStatus('ws-detections-dot', true);
+                };
+
+                wsDetections.onmessage = (event) => {
+                    try {
+                        const message = JSON.parse(event.data);
+                        debugLog(`📨 Detections WS: ${message.action || 'unknown'} for camera ${message.camera_id || 'N/A'}`);
+
+                        if (message.action === 'new_detections') {
+                            handleDetectionMessage(message);
+                        }
+                    } catch (error) {
+                        debugLog(`❌ Error parsing detections message: ${error}`);
+                    }
+                };
+
+                wsDetections.onclose = (event) => {
+                    debugLog(`❌ Detections WebSocket disconnected: ${event.code}`);
+                    updateConnectionStatus('ws-detections-dot', false);
+                    setTimeout(connectDetectionsWebSocket, 3000);
+                };
+
+                wsDetections.onerror = (error) => {
+                    debugLog(`❌ Detections WebSocket error: ${error}`);
+                };
+
+            } catch (error) {
+                debugLog(`❌ Failed to create detections WebSocket: ${error}`);
+                setTimeout(connectDetectionsWebSocket, 3000);
+            }
+        }
+
+        function updateConnectionStatus(elementId, connected) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.classList.toggle('websocket-connected', connected);
+                element.classList.toggle('websocket-disconnected', !connected);
+            }
+        }
+
+        // ======= Message Handlers =======
+        function handleFrameMessage(message) {
+            const cameraId = message.camera_id;
+            const imageData = message.crop || message.annotated;
+            const mimeType = message.crop_mime || message.annotated_mime || 'image/jpeg';
+
+            if (imageData && cameraId !== undefined) {
+                updateCameraFrame(cameraId, imageData, mimeType);
+            }
+
+            // Update statistics if provided
+            if (typeof message.total_count === 'number' && cameraId !== undefined) {
+                updateCameraStats(cameraId, 'count', message.total_count);
+            }
+            if (typeof message.total_score === 'number' && cameraId !== undefined) {
+                updateCameraStats(cameraId, 'score', message.total_score);
+            }
+        }
+
+        function handleDetectionMessage(message) {
+            const cameraId = message.camera_id;
+            const newPoints = message.new_points || [];
+
+            if (newPoints.length > 0) {
+                debugLog(`🎯 New detections: ${newPoints.length} points for camera ${cameraId}`);
+
+                // Update global statistics
+                totalDetections += newPoints.length;
+                totalScore += newPoints.reduce((sum, point) => sum + (point.score || 0), 0);
+
+                document.getElementById('detections-count').textContent = totalDetections;
+                document.getElementById('score-count').textContent = totalScore;
+
+                // Update camera-specific statistics
+                updateCameraStats(cameraId, 'count', message.total_count);
+                updateCameraStats(cameraId, 'score', message.total_score);
+            }
+        }
+
+        function updateCameraFrame(cameraId, imageData, mimeType) {
+            const imageElement = document.querySelector(`.camera-feed[data-camera-id="${cameraId}"]`);
+            if (imageElement) {
+                imageElement.src = `data:${mimeType};base64,${imageData}`;
+            }
+        }
+
+        function updateCameraStats(cameraId, type, value) {
+            if (!cameraStats.has(cameraId)) {
+                cameraStats.set(cameraId, { count: 0, score: 0 });
+            }
+
+            const stats = cameraStats.get(cameraId);
+            stats[type] = value;
+
+            const statsElement = document.getElementById(`stats-${cameraId}`);
+            if (statsElement) {
+                statsElement.textContent = `Hits: ${stats.count} | Score: ${stats.score}`;
+            }
+        }
+
+        // ======= API Functions =======
+        async function apiFetch(endpoint, options = {}) {
+            // Build URL:
+            // - if endpoint is a full URL (starts with http) -> use as-is
+            // - else if endpoint already starts with API_PREFIX -> API_BASE + endpoint
+            // - else -> API_BASE + API_PREFIX + endpoint
+            let url;
+            if (typeof endpoint !== 'string') endpoint = String(endpoint || '');
+            if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+                url = endpoint;
+            } else if (endpoint.startsWith(API_PREFIX)) {
+                url = `${API_BASE}${endpoint}`;
+            } else {
+                url = `${API_BASE}${API_PREFIX}${endpoint}`;
+            }
+
+            const config = {
+                method: options.method || 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            };
+
+            if (options.body) {
+                config.body = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+            }
+
+            try {
+                debugLog(`🌐 API ${config.method}: ${url}`);
+                const response = await fetch(url, config);
+
+                if (!response.ok) {
+                    const text = await response.text().catch(() => '');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText} ${text}`);
+                }
+
+                const contentType = response.headers.get('content-type') || '';
+                let data;
+
+                if (contentType.includes('application/json')) {
+                    data = await response.json();
+                } else {
+                    data = await response.text();
+                }
+
+                setApiResponse(data);
+                return data;
+            } catch (error) {
+                debugLog(`❌ API Error: ${error.message}`);
+                setApiResponse({ error: true, message: error.message });
+                throw error;
+            }
+        }
+
+        function setApiResponse(data) {
+            const element = document.getElementById('api-response');
+            if (element) {
+                try {
+                    element.textContent = JSON.stringify(data, null, 2);
+                } catch {
+                    element.textContent = String(data);
+                }
+            }
+        }
+
+        // ======= Camera Management =======
+        async function loadBranches() {
+            try {
+                const branches = await apiFetch('/branches');
+                const branchSelect = document.getElementById('branch-select');
+
+                branchSelect.innerHTML = '<option value="">All Branches</option>';
+
+                if (Array.isArray(branches)) {
+                    branches.forEach(branch => {
+                        const option = document.createElement('option');
+                        option.value = branch.Id;
+                        option.textContent = `${branch.Name} (ID: ${branch.Id})`;
+                        branchSelect.appendChild(option);
+                    });
+                    document.getElementById('branch-count').textContent = branches.length;
+
+                    // Also populate branch table
+                    renderBranchTable(branches);
+                } else {
+                    document.getElementById('branch-count').textContent = 0;
+                    renderBranchTable([]);
+                }
+            } catch (error) {
+                debugLog('Failed to load branches');
+                document.getElementById('branch-count').textContent = 0;
+            }
+        }
+
+        async function loadCameras() {
+            const branchSelect = document.getElementById('branch-select');
+            const branchId = branchSelect ? branchSelect.value : '';
+
+            let url = '/cameras';
+            if (branchId) {
+                url += `?branch_id=${branchId}`;
+            }
+
+            try {
+                const cameras = await apiFetch(url);
+                renderCameras(Array.isArray(cameras) ? cameras : []);
+                document.getElementById('camera-count').textContent = Array.isArray(cameras) ? cameras.length : 0;
+
+                // Also populate camera table for management
+                renderCameraTable(Array.isArray(cameras) ? cameras : []);
+            } catch (error) {
+                renderCameras([]);
+                renderCameraTable([]);
+            }
+        }
+
+        function renderCameras(cameras) {
+            const container = document.getElementById('camera-streams-container');
+
+            if (!cameras || cameras.length === 0) {
+                container.innerHTML = '<div class="card" style="color:var(--gray); text-align:center; padding:40px;">No cameras found</div>';
+                return;
+            }
+
+            container.innerHTML = cameras.map(camera => `
+                <div class="stream-card">
+                    <div class="stream-header">
+                        <h3>${camera.Description || `Camera ${camera.Id}`}</h3>
+                        <span class="badge badge-success">ID: ${camera.Id}</span>
+                    </div>
+                    <div class="stream-content">
+                        <img src="https://placehold.co/600x400/4361ee/white?text=Camera+${camera.Id}+Loading..."
+                             alt="Camera ${camera.Id}"
+                             class="camera-feed"
+                             data-camera-id="${camera.Id}" />
+                    </div>
+                    <div class="stream-actions">
+                        <div>
+                            <button class="btn btn-primary" onclick="startCamera(${camera.Id})">
+                                <i class="fas fa-play"></i> Start
+                            </button>
+                            <button class="btn btn-danger" onclick="stopCamera(${camera.Id})">
+                                <i class="fas fa-stop"></i> Stop
+                            </button>
+                            <button class="btn" onclick="testCamera(${camera.Id})">
+                                <i class="fas fa-sync"></i> Test
+                            </button>
+                        </div>
+                        <div class="pill" id="stats-${camera.Id}">
+                            Hits: 0 | Score: 0
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function startCamera(cameraId) {
+            try {
+                debugLog(`Starting camera ${cameraId}...`);
+                await apiFetch(`/ai/cameras/${cameraId}/start`, { method: 'POST' });
+                debugLog(`✅ Camera ${cameraId} started`);
+            } catch (error) {
+                debugLog(`❌ Failed to start camera ${cameraId}`);
+            }
+        }
+
+        async function stopCamera(cameraId) {
+            try {
+                debugLog(`Stopping camera ${cameraId}...`);
+                await apiFetch(`/ai/cameras/${cameraId}/stop`, { method: 'POST' });
+                debugLog(`✅ Camera ${cameraId} stopped`);
+            } catch (error) {
+                debugLog(`❌ Failed to stop camera ${cameraId}`);
+            }
+        }
+
+        async function testCamera(cameraId) {
+            try {
+                debugLog(`Testing camera ${cameraId}...`);
+                const frame = await apiFetch(`/ai/cameras/${cameraId}/frame`);
+                debugLog(`✅ Camera ${cameraId} test successful`);
+                // Optionally update frame preview if returned
+                if (frame && frame.annotated) {
+                    updateCameraFrame(cameraId, frame.annotated, frame.annotated_mime || 'image/jpeg');
+                }
+            } catch (error) {
+                debugLog(`❌ Camera ${cameraId} test failed`);
+            }
+        }
+
+        // ======= Simple table rendering & search helpers =======
+        function renderCameraTable(cameras) {
+            const tbody = document.querySelector('#camera-table tbody');
+            if (!tbody) return;
+            tbody.innerHTML = cameras.map(cam => `
+                <tr>
+                    <td style="padding:8px;">${cam.Id}</td>
+                    <td style="padding:8px;">${cam.IpAddress || ''}</td>
+                    <td style="padding:8px;">${cam.Username || ''}</td>
+                    <td style="padding:8px;">${cam.BranchId || ''}</td>
+                    <td style="padding:8px;">${cam.Description || ''}</td>
+                    <td style="padding:8px;">
+                        <button class="btn" onclick="startCamera(${cam.Id})">Start</button>
+                        <button class="btn" onclick="stopCamera(${cam.Id})">Stop</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderBranchTable(branches) {
+            const tbody = document.querySelector('#branch-table tbody');
+            if (!tbody) return;
+            tbody.innerHTML = branches.map(b => `
+                <tr>
+                    <td style="padding:8px;">${b.Id}</td>
+                    <td style="padding:8px;">${b.Name}</td>
+                    <td style="padding:8px;">${b.RegionId}</td>
+                    <td style="padding:8px;">${b.Description || ''}</td>
+                    <td style="padding:8px;">
+                        <button class="btn" onclick="document.getElementById('branch-select').value='${b.Id}'; loadCameras();">Select</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterCameraTable() {
+            const q = document.getElementById('cam-search').value.trim().toLowerCase();
+            const rows = document.querySelectorAll('#camera-table tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = q === '' || text.includes(q) ? '' : 'none';
+            });
+        }
+
+        // ======= Settings Management =======
+        async function sendSettings() {
+            try {
+                const settingsText = document.getElementById('settings-json').value;
+                const settings = JSON.parse(settingsText);
+
+                await apiFetch('/ai/settings', {
+                    method: 'POST',
+                    body: settings
+                });
+
+                debugLog('✅ Settings updated via API');
+
+                // Also send via WebSocket
+                sendSettingsOverWebSocket();
+            } catch (error) {
+                debugLog('❌ Failed to send settings: ' + (error.message || error));
+            }
+        }
+
+        function sendSettingsOverWebSocket() {
+            if (wsFrames && wsFrames.readyState === WebSocket.OPEN) {
+                try {
+                    const settingsText = document.getElementById('settings-json').value;
+                    const settings = JSON.parse(settingsText);
+
+                    wsFrames.send(JSON.stringify({
+                        action: 'settings',
+                        settings: settings
+                    }));
+
+                    debugLog('⚙️ Settings sent via WebSocket');
+                } catch (error) {
+                    debugLog('❌ Failed to send settings via WebSocket');
+                }
+            }
+        }
+
+        // ======= Health Check =======
+        async function checkHealth() {
+            try {
+                const health = await apiFetch('/ai/health');
+                document.getElementById('health-text').textContent = 'API Connected';
+                updateConnectionStatus('ws-dot', true);
+                return true;
+            } catch (error) {
+                document.getElementById('health-text').textContent = 'API Error';
+                updateConnectionStatus('ws-dot', false);
+                return false;
+            }
+        }
+
+        // ======= Initialization =======
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup tab navigation
+            setupTabs();
+
+            // Initialize the application
+            initializeApp();
+
+            // Set up periodic health checks
+            setInterval(checkHealth, 30000);
+        });
+
+        function setupTabs() {
+            // Main tabs
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+
+                    // Update active menu item
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Show corresponding tab
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    const target = document.getElementById(tabId);
+                    if (target) target.classList.add('active');
+                });
+            });
+
+            // Console tabs
+            document.querySelectorAll('.console-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+
+                    document.querySelectorAll('.console-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    document.querySelectorAll('#apiConsole .tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    const target = document.getElementById(tabId);
+                    if (target) target.classList.add('active');
+                });
+            });
+        }
+
+        async function initializeApp() {
+            debugLog('🚀 Initializing application...');
+
+            // Check API health first
+            await checkHealth();
+
+            // Load initial data
+            await loadBranches();
+            await loadCameras();
+
+            // Connect WebSockets
+            connectWebSockets();
+
+            debugLog('✅ Application initialized');
+        }
+
+        // ======= Global Functions =======
+        window.testEndpoint = async function(method, endpoint) {
+            try {
+                await apiFetch(endpoint, { method });
+            } catch (error) {
+                // Error handled in apiFetch
+            }
+        };
+
+        window.createCamera = async function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const cameraData = {
+                Username: formData.get('Username'),
+                Password: formData.get('Password'),
+                IpAddress: formData.get('IpAddress'),
+                BranchId: parseInt(formData.get('BranchId')),
+                Description: formData.get('Description') || undefined
+            };
+
+            try {
+                await apiFetch('/cameras', {
+                    method: 'POST',
+                    body: cameraData
+                });
+                event.target.reset();
+                await loadCameras();
+            } catch (error) {
+                // Error handled in apiFetch
+            }
+            return false;
+        };
+
+        window.createBranch = async function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const branchData = {
+                Name: formData.get('Name'),
+                RegionId: parseInt(formData.get('RegionId')),
+                Description: formData.get('Description') || undefined
+            };
+
+            try {
+                await apiFetch('/branches', {
+                    method: 'POST',
+                    body: branchData
+                });
+                event.target.reset();
+                await loadBranches();
+            } catch (error) {
+                // Error handled in apiFetch
+            }
+            return false;
+        };
+
+        // Event listeners
+        document.getElementById('refresh-cams').addEventListener('click', loadCameras);
+        document.getElementById('branch-select').addEventListener('change', loadCameras);
+
+        // Aliases used in UI (prevent missing function errors)
+        window.loadCameras = loadCameras;
+        window.loadBranches = loadBranches;
+        window.loadCameraList = loadCameras;   // alias for UI
+        window.loadBranchList = loadBranches;  // alias for UI
+        window.startCamera = startCamera;
+        window.stopCamera = stopCamera;
+        window.testCamera = testCamera;
+        window.sendSettings = sendSettings;
+
+    </script>
+</body>
+</html>
